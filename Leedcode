@@ -1,0 +1,66 @@
+char find_pair(char b) {
+    switch (b) {
+        case ')':
+            return '(';
+        case ']':
+            return '[';
+        case '}':
+            return '{';
+    }
+    return '\0';
+}
+
+bool isValid(char * s) {
+    /* value of result:
+       0: false
+       1: true
+      -1: not set */
+    int result = -1;
+
+    int len = strlen(s);
+
+    /* implement stack using array */
+    char *st = malloc(len * sizeof(char));
+
+    /* top is the index of top item */
+    /* if (top == -1), then stack is empty */
+    int top = -1;
+
+    for (int i = 0; i < len; i++) {
+        char current = s[i];
+        if ((current == ')') || (current == ']') || (current == '}')) {
+            if (top == -1) {
+                /* stack is empty */
+                result = 0;
+                break;
+            }
+            else {
+                /* stack is NOT empty */
+                if (st[top] != find_pair(current)) {
+                    /* not match */
+                    result = 0;
+                    break;
+                }
+                else {
+                    /* match! */
+                    top--;  /* stack pop */
+                }
+            }
+        }
+        else {
+            /* current character is '(', '[', or '{' */
+            /* push current character into stack */
+            top++;
+            st[top] = current;
+        }
+    }
+
+    if (result == -1) {
+        result = (top == -1);  /* if finally stack is empty, then valid */
+    }
+
+    /* clean up allocated memory */
+    free(st);
+
+    return result;
+}
