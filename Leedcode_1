@@ -1,0 +1,54 @@
+char find_pair(char b) {
+ switch (b) {
+case ')':
+return '(';
+case ']':
+return '[';
+case '}':
+return '{';
+    }
+    return '\0';
+}
+
+bool isValid(char * s) {
+    int result = -1;
+
+int len = strlen(s);
+
+char *st = malloc(len * sizeof(char));
+
+int top = -1;
+
+for (int i = 0; i < len; i++) {
+    char current = s[i];
+ if ((current == ')') || (current == ']') || (current == '}')) {
+    if (top == -1) {
+    result = 0;
+ break;
+ }
+else {
+ if (st[top] != find_pair(current)) {
+                   
+result = 0;
+break;
+ }
+ else {
+ top--; 
+  }
+ }
+ }
+else {
+           
+  top++;
+   st[top] = current;
+}
+ }
+
+if (result == -1) {
+ result = (top == -1); 
+    }
+
+    free(st);
+
+return result;
+}
