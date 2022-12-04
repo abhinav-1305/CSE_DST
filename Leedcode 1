@@ -1,0 +1,45 @@
+typedef struct StackItem {
+    char item;
+    struct StackItem* next;
+} StackItem;
+
+void StackPush (struct StackItem** stack, char item) {
+    struct StackItem* top = (struct StackItem *) malloc(sizeof(struct StackItem));
+    top->item = item;
+    top->next = (*stack);
+    (*stack) = top;
+}
+
+char StackPop (struct StackItem** stack) {
+    if (*stack) {
+        char aux = (*stack)->item;
+        struct StackItem* tmp = (*stack);
+        (*stack) = (*stack)->next;
+        free(tmp);
+        return aux;
+    }
+    else
+        return 0;
+}
+
+bool isValid(char* s) {
+    struct StackItem* stack = NULL;
+    
+    for (int i = 0; s[i]; i++) {
+        switch(s[i]) {
+            case '(':
+                StackPush(&stack, ')');
+                break;
+            case '[':
+                StackPush(&stack, ']');
+                break;
+            case '{':
+                StackPush(&stack, '}');
+                break;
+            default:
+                if (stack == NULL || StackPop(&stack) != s[i])
+                    return false;                
+        }
+    }
+    return (stack == NULL);
+}
